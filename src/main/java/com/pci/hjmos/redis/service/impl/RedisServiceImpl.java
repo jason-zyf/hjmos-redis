@@ -153,5 +153,16 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.hasKey(key);
     }
 
+    @Override
+    public Long batchDelete(Collection<String> keys) {
+        return redisTemplate.delete(keys);
+    }
+
+    @Override
+    public Set<String> keys() {
+        String prefix = "*";
+        return redisTemplate.keys(prefix);
+    }
+
 
 }
