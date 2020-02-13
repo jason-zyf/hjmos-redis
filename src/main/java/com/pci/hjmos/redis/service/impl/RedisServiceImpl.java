@@ -142,11 +142,16 @@ public class RedisServiceImpl implements RedisService {
         redisTemplate.expire(key,expireTime, TimeUnit.SECONDS);
     }
 
-    @Override
+    /*@Override
     public Set<String> fuzzyKey(String key) {
         String str = key+"*";
         return redisTemplate.keys(key);
     }
+    @Override
+    public Set<String> keys() {
+        String prefix = "*";
+        return redisTemplate.keys(prefix);
+    }*/
 
     @Override
     public Boolean existsKey(String key) {
@@ -158,11 +163,7 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.delete(keys);
     }
 
-    @Override
-    public Set<String> keys() {
-        String prefix = "*";
-        return redisTemplate.keys(prefix);
-    }
+
 
 
 }
