@@ -11,7 +11,7 @@ import java.util.Set;
 @Component
 public interface RedisService {
     /**
-     * --------String--------star
+     * --------------------------------- String 操作---------------------------------
      * 增加接口
      * @param key 缓存key
      * @param value 缓存值
@@ -46,14 +46,13 @@ public interface RedisService {
     List<Object> multiGet(Collection<String> keys);
 
     /**
-     * --------String--------end
      * 删除
      * @param key 缓存key
      */
     Boolean delete(String key);
 
     /**
-     * --------Hash--------start
+     * --------------------------------- Hash 操作---------------------------------
      * 向key的hash 中存hashKey属性值为hashValue
      * @param key 缓存key
      * @param hashKey 属性名称
@@ -89,7 +88,6 @@ public interface RedisService {
     Map<Object, Object> hEntries(String key) ;
 
     /**
-     * * --------Hash--------end
      * key的hash 中是否存在hashKey属性
      * @param key 缓存key
      * @param hashKey 属性名称
@@ -97,7 +95,7 @@ public interface RedisService {
     Boolean hExists(String key, String hashKey);
 
     /**
-     * --------List--------start
+     * --------------------------------- List 操作 ---------------------------------
      * 向集合中添加元素
      * @param key 缓存key
      * @param value 添加的元素
@@ -153,7 +151,6 @@ public interface RedisService {
     List<Object> lGet(String key);
 
     /**
-     * --------List--------end
      * 获取片段集合
      * @param key 缓存key
      * @param start 开始节点
@@ -163,7 +160,7 @@ public interface RedisService {
     List<Object> lGet(String key, long start, long end) ;
 
     /**
-     * --------Set--------start
+     * --------------------------------- Set 操作---------------------------------
      * 添加 set 元素
      * @param key
      * @param values
@@ -185,7 +182,6 @@ public interface RedisService {
      */
     Boolean isMember(String key,Object value);
     /**
-     * --------Set--------end
      * 返回集合中所有元素
      * @param key
      * @return
@@ -193,7 +189,7 @@ public interface RedisService {
     Set<Object> members(String key);
 
     /**
-     * --------ZSet--------start
+     * --------------------------------- ZSet 操作---------------------------------
      * 添加 ZSet 元素
      * @param key
      * @param value
@@ -258,7 +254,6 @@ public interface RedisService {
      */
     Set<Object> range(String key, long start, long end);
     /**
-     * --------ZSet--------end
      * 获取分数范围内的 [min,max] 的排序结果集合 (从小到大,只有列名)
      * @param key
      * @param min
@@ -269,7 +264,8 @@ public interface RedisService {
 
 
     /**
-     * (通用) 设置过期时间 单位（秒）
+     * ---------------------------------(通用) ---------------------------------
+     * 设置过期时间 单位（秒）
      */
     void expireKey(String key, long expireTime);
 
@@ -301,5 +297,8 @@ public interface RedisService {
      */
     Long batchDelete(Collection<String> keys);
 
-
+    /**
+     * 切换数据库
+     */
+    void selectDatabase(int indexDB);
 }

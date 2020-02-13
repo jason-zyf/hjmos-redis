@@ -1,6 +1,7 @@
 package com.pci.hjmos.redis.service.impl;
 
 import com.pci.hjmos.redis.service.RedisService;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
@@ -226,7 +227,13 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.delete(keys);
     }
 
-
-
+    @Override
+    public void selectDatabase(int indexDB) {
+        LettuceConnectionFactory jedisConnectionFactory = (LettuceConnectionFactory) redisTemplate.getConnectionFactory();
+        assert jedisConnectionFactory != null;
+        jedisConnectionFactory.setDatabase(indexDB);
+        redisTemplate.setConnectionFactory(jedisConnectionFactory);
+        jedisConnectionFactory.resetConnection();
+    }
 
 }
