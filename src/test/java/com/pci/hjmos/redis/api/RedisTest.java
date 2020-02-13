@@ -64,7 +64,7 @@ public class RedisTest {
      */
     @Test
     public void testGet(){
-        String key = "aa";
+        String key = "a";
         log.info("{}的值为：{}",key,redisService.get(key).toString());
     }
 
@@ -172,8 +172,14 @@ public class RedisTest {
     public void testHashGet(){
         String key = "user";
         String hashKey = "name";
-        Object obj = redisService.hGet(key, hashKey);
-        log.info("获取hash类型的值，{}",obj.toString());          // zhangsan
+        // 先判断user对象的name属性是否存在，避免mvn test打包时先执行删除user.name而出现的空指针异常
+        Boolean hExists = redisService.hExists(key, hashKey);
+        if(hExists){
+            Object obj = redisService.hGet(key, hashKey);
+            log.info("获取hash类型的值，{}",obj.toString());          // zhangsan
+        }else{
+            log.info("获取对象的属性值失败，不存在hash类型键值{}-{}",key,hashKey);
+        }
     }
 
     /**
@@ -184,6 +190,7 @@ public class RedisTest {
         String key = "user";
         String hashKey = "name";
         redisService.hRemove(key, hashKey);
+        log.info("成功删除"+key+"对象里的"+hashKey+"属性");
     }
 
     /**
@@ -193,7 +200,7 @@ public class RedisTest {
     public void testHashEntries(){
         String key = "user";
         Map<Object, Object> objMap = redisService.hEntries(key);
-        log.info(objMap.toString());   // {age=13, name=zhangshan}
+        log.info("获取hash类型key的所有属性及属性值："+objMap.toString());   // {age=13, name=zhangshan}
     }
 
     /**
@@ -285,7 +292,7 @@ public class RedisTest {
     /**
      *
      */
-    @Test
+    /*@Test
     public void testListMultiSet(){
         List<String> values = new ArrayList<>();
         values.add("5");
@@ -294,6 +301,6 @@ public class RedisTest {
         String key = "list1";
         Long num = redisService.lMultiSet(key, values);
         log.info("新增后，有{}个数据",num);
-    }
+    }*/
 
 }
