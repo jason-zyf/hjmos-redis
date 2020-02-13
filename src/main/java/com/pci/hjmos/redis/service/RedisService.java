@@ -167,11 +167,20 @@ public interface RedisService {
     void expireKey(String key, long expireTime);
 
     /**
-     * 键值模糊查询，以key字符串开头的所有键值集合
+     * 键值模糊查询，以key字符串开头的所有键值集合，
+     * 先注释掉，模糊匹配功能使用非常方便也很强大，在小数据量情况下使用没什么问题，数据量大会导致Redis锁住及CPU飙升
+     * 生产环境不建议开放
      * @param key
      * @return
      */
-    Set<String> fuzzyKey(String key);
+//    Set<String> fuzzyKey(String key);
+
+    /**
+     * 获取所有key 的集合
+     * 先注释掉，模糊匹配功能使用非常方便也很强大，在小数据量情况下使用没什么问题，数据量大会导致Redis锁住及CPU飙升
+     * @return
+     */
+//    Set<String> keys();
 
     /**
      * String 类型 判断key是否存在
@@ -187,11 +196,6 @@ public interface RedisService {
      */
     Long batchDelete(Collection<String> keys);
 
-    /**
-     * 获取所有key 的集合
-     * @return
-     */
-    Set<String> keys();
 
 
 
