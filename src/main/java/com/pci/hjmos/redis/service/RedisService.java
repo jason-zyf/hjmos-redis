@@ -32,7 +32,7 @@ public interface RedisService {
     void multiSet(Map<String, Object> maps);
 
     /**
-     * 获取值接口
+     * 获取值接口 String类型
      * @param key 缓存key
      */
     Object get(String key);
@@ -179,6 +179,20 @@ public interface RedisService {
      * @return
      */
     Boolean existsKey(String key);
+
+    /**
+     * 批量删除
+     * @param keys  删除key的集合
+     * @return  删除的个数
+     */
+    Long batchDelete(Collection<String> keys);
+
+    /**
+     * 获取所有key 的集合
+     * @return
+     */
+    Set<String> keys();
+
 
 
 }
