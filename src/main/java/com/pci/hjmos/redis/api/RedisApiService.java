@@ -212,7 +212,7 @@ public class RedisApiService {
         return result;
     }
 
-    public  Long lMultiSet(String key, Object values) {
+    public  Long lMultiSet(String key, List<Object> values) {
         ListOperations<String, Object> operations = redisTemplate.opsForList();
         return operations.rightPushAll(key, values);
     }

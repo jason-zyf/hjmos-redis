@@ -2,6 +2,7 @@ package com.pci.hjmos.redis.service.impl;
 
 import com.pci.hjmos.redis.service.RedisService;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,51 @@ public class RedisServiceImpl implements RedisService {
     public Boolean hExists(String key, String hashKey) {
         HashOperations<String, Object, Object> operations = redisTemplate.opsForHash();
         return operations.hasKey(key, hashKey);
+    }
+
+    @Override
+    public Long lSet(String key, Object value) {
+        return redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    @Override
+    public Long lSet(String key, Object value, long time) {
+        Long result = redisTemplate.opsForList().rightPush(key, value);
+        expireKey(key, time);
+        return result;
+    }
+
+    @Override
+    public Long lMultiSet(String key, List<Object> values) {
+        ListOperations<String, Object> operations = redisTemplate.opsForList();
+        return operations.rightPushAll(key, values);
+    }
+
+    @Override
+    public Long lMultiSet(String key, List<Object> values, boolean isClear) {
+        if (isClear)
+            redisTemplate.delete(key);
+        return redisTemplate.opsForList().rightPushAll(key, values);
+    }
+
+    @Override
+    public Long lMultiSet(String key, List<Object> values, boolean isClear, long time) {
+        Long result = lMultiSet(key, values, isClear);
+        expireKey(key, time);
+        return result;
+    }
+    @Override
+    public Long lRemove(String key, Object value) {
+        ListOperations<String, Object> operations = redisTemplate.opsForList();
+        return operations.remove(key,0,value);
+    }
+    @Override
+    public List<Object> lGet(String key) {
+        return lGet(key, 0, -1);
+    }
+    @Override
+    public List<Object> lGet(String key, long start, long end) {
+        return redisTemplate.opsForList().range(key, start, end);
     }
 
 
