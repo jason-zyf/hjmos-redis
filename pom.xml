@@ -134,4 +134,27 @@
 
     </dependencies>
 
+    <!-- 打包的时候先执行测试用例 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19</version>
+                <configuration>
+                    <forkMode>once</forkMode>
+                    <argLine>-Dfile.encoding=UTF-8</argLine><!-- 解决读取测试数据时的中文乱码问题 -->
+                    <!--只能运行在test目录下的类-->
+                    <includes>
+                        <include>
+                            RedisTest.java
+                        </include>
+                    </includes>
+                    <!--<parallel>methods</parallel>-->
+                    <!--<threadCount>1</threadCount>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
