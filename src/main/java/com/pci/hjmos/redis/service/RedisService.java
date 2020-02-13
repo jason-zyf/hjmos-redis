@@ -165,13 +165,18 @@ public interface RedisService {
      * (通用) 设置过期时间 单位（秒）
      */
     void expireKey(String key, long expireTime);
+
     /**
-     *  key的模糊查询
+     * 键值模糊查询，以key字符串开头的所有键值集合
+     * @param key
+     * @return
      */
     Set<String> fuzzyKey(String key);
 
     /**
-     * key 是否存在
+     * String 类型 判断key是否存在
+     * @param key 缓存key
+     * @return
      */
     Boolean existsKey(String key);
 
