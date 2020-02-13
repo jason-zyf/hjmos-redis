@@ -1,10 +1,7 @@
 package com.pci.hjmos.redis.service.impl;
 
 import com.pci.hjmos.redis.service.RedisService;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -136,6 +133,72 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
+    //无序set操作
+    @Override
+    public Long add(String key ,String ...values){
+        return redisTemplate.opsForSet().add(key, values);
+    }
+
+    @Override
+    public Long remove(String key,Object ...values){
+        return redisTemplate.opsForSet().remove(key, values);
+    }
+
+    @Override
+    public Boolean isMember(String key,Object value){
+        return redisTemplate.opsForSet().isMember(key, value);
+    }
+
+    @Override
+    public Set<Object> members(String key){
+        return redisTemplate.opsForSet().members(key);
+    }
+
+    //有序zset操作
+    @Override
+    public void zAdd(String key, Object value, double score) {
+        redisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    @Override
+    public Double incrementScore(String key, Object value, double score) {
+        return redisTemplate.opsForZSet().incrementScore(key, value, score);
+    }
+
+    @Override
+    public Long batchAddZset(String key, Set<ZSetOperations.TypedTuple<Object>> tuples) {
+        return redisTemplate.opsForZSet().add(key, tuples);
+    }
+
+    @Override
+    public Long removeZset(String key, String... values) {
+        return redisTemplate.opsForZSet().remove(key, values);
+    }
+
+    @Override
+    public void zremoveByScore(String key, double min, double max) {
+        redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+    }
+
+    @Override
+    public Long rank(String key, Object value) {
+        return redisTemplate.opsForZSet().rank(key, value);
+    }
+
+    @Override
+    public Long reverseRank(String key, Object value) {
+        return redisTemplate.opsForZSet().reverseRank(key, value);
+    }
+
+    @Override
+    public Set<Object> range(String key, long start, long end) {
+        return redisTemplate.opsForZSet().range(key, start, end);
+    }
+
+    @Override
+    public Set<Object> rangeByScore(String key, double min, double max) {
+        return redisTemplate.opsForZSet().rangeByScore(key, min, max);
+    }
 
     @Override
     public void expireKey(String key, long expireTime) {
