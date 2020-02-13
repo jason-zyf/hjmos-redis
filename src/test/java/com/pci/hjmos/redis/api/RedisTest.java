@@ -1,9 +1,11 @@
 package com.pci.hjmos.redis.api;
 
 import com.pci.hjmos.redis.RedisApplication;
+import com.pci.hjmos.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,15 +18,18 @@ import java.util.*;
 public class RedisTest {
 
     @Resource
-    private RedisApiService redisService;
+    private RedisApiService redisApiService;
+
+    @Autowired
+    private RedisService redisService;
 
     /**
      * 设置key-value值
      */
     @Test
     public void testSetValue(){
-        redisService.set("a", "aa");
-        log.info("设置a的值，{}",redisService.get("a").toString());
+        redisApiService.set("a", "aa");
+        log.info("设置a的值，{}",redisApiService.get("a").toString());
     }
 
     /**
@@ -33,7 +38,7 @@ public class RedisTest {
     @Test
     public void testExpire(){
         String key = "a";
-        redisService.expire(key, 10);
+        redisApiService.expire(key, 10);
         log.info("成功设置过期时间");
     }
 
@@ -44,7 +49,7 @@ public class RedisTest {
     public void testPutExpireKey(){
         String key = "aa";
         Long expireTime = 100L;
-        redisService.set(key, "hhh", expireTime);
+        redisApiService.set(key, "hhh", expireTime);
         log.info("设置key-value，且设置key的过期时间");
     }
 
@@ -55,7 +60,7 @@ public class RedisTest {
     public void testExpireKey(){
         String key = "a";
         Long expireTime = 100L;
-        redisService.expireKey(key, expireTime);
+        redisApiService.expireKey(key, expireTime);
         log.info("成功设置过期时间");
     }
 
@@ -65,7 +70,7 @@ public class RedisTest {
     @Test
     public void testGet(){
         String key = "a";
-        log.info("{}的值为：{}",key,redisService.get(key).toString());
+        log.info("{}的值为：{}",key,redisApiService.get(key).toString());
     }
 
     /**
@@ -75,12 +80,12 @@ public class RedisTest {
     public void testGetCollection(){
 
         Set<String> set = new HashSet<>();
-        redisService.set("a", "aa");
-        redisService.set("b", "bb");
+        redisApiService.set("a", "aa");
+        redisApiService.set("b", "bb");
 
         set.add("a");
         set.add("b");
-        Collection<Object> objects = redisService.get(set);
+        Collection<Object> objects = redisApiService.get(set);
         log.info(objects.toString());          // [aa, bb]
     }
 
@@ -89,9 +94,9 @@ public class RedisTest {
      */
     @Test
     public void testIncr(){
-        redisService.set("a", 1);
-        redisService.incr("a");
-        log.info(redisService.get("a").toString());    // 2
+        redisApiService.set("a", 1);
+        redisApiService.incr("a");
+        log.info(redisApiService.get("a").toString());    // 2
     }
 
     /**
@@ -99,12 +104,12 @@ public class RedisTest {
      */
     @Test
     public void testFuzzy(){
-        redisService.set("aa", 1);
-        redisService.set("ab", 1);
-        redisService.set("cab", 1);
+        redisApiService.set("aa", 1);
+        redisApiService.set("ab", 1);
+        redisApiService.set("cab", 1);
 
-        Set<String> set = redisService.fuzzy("a*");
-        Set<String> set2 = redisService.fuzzy("a.");
+        Set<String> set = redisApiService.fuzzy("a*");
+        Set<String> set2 = redisApiService.fuzzy("a.");
 
         log.info(set.toString());       // [ab, age, asd, a, aa]
         log.info(set2.toString());      // []
@@ -116,7 +121,7 @@ public class RedisTest {
     @Test
     public void testKeyExists(){
         String key = "a";
-        Boolean exists = redisService.exists(key);
+        Boolean exists = redisApiService.exists(key);
         if(exists){
             log.info("{}键存在",key);
         }else {
@@ -130,7 +135,7 @@ public class RedisTest {
     @Test
     public void testDeleteKey(){
         String key = "a";
-        Boolean exists = redisService.delete(key);
+        Boolean exists = redisApiService.delete(key);
         if(exists){
             log.info("{}键删除成功",key);
         }else {
@@ -147,9 +152,9 @@ public class RedisTest {
         Set<String> keys = new HashSet<>();
         keys.add("aa");
         keys.add("ab");
-        Long delNum = redisService.delete(keys);
+        Long delNum = redisApiService.delete(keys);
         log.info("成功删除{}个key键",delNum);
-        Set<String> set = redisService.fuzzy("a*");
+        Set<String> set = redisApiService.fuzzy("a*");
         log.info(set.toString());    // [age]
     }
 
@@ -161,7 +166,7 @@ public class RedisTest {
         String key = "user";
         String hashKey = "name";
         String value = "zhangsan";
-        redisService.hPut(key, hashKey, value);
+        redisApiService.hPut(key, hashKey, value);
         log.info("设置hash对象成功");
     }
 
@@ -172,14 +177,18 @@ public class RedisTest {
     public void testHashGet(){
         String key = "user";
         String hashKey = "name";
+        String value = "zhangsan";
+        redisService.hPut(key, hashKey, value);
         // 先判断user对象的name属性是否存在，避免mvn test打包时先执行删除user.name而出现的空指针异常
-        Boolean hExists = redisService.hExists(key, hashKey);
+        /*Boolean hExists = redisApiService.hExists(key, hashKey);
         if(hExists){
-            Object obj = redisService.hGet(key, hashKey);
+            Object obj = redisApiService.hGet(key, hashKey);
             log.info("获取hash类型的值，{}",obj.toString());          // zhangsan
         }else{
             log.info("获取对象的属性值失败，不存在hash类型键值{}-{}",key,hashKey);
-        }
+        }*/
+        Object obj = redisApiService.hGet(key, hashKey);
+        log.info("获取hash类型"+key+"的"+hashKey+"属性值，{}",obj.toString());
     }
 
     /**
@@ -189,7 +198,7 @@ public class RedisTest {
     public void testHashRemove(){
         String key = "user";
         String hashKey = "name";
-        redisService.hRemove(key, hashKey);
+        redisApiService.hRemove(key, hashKey);
         log.info("成功删除"+key+"对象里的"+hashKey+"属性");
     }
 
@@ -199,7 +208,7 @@ public class RedisTest {
     @Test
     public void testHashEntries(){
         String key = "user";
-        Map<Object, Object> objMap = redisService.hEntries(key);
+        Map<Object, Object> objMap = redisApiService.hEntries(key);
         log.info("获取hash类型key的所有属性及属性值："+objMap.toString());   // {age=13, name=zhangshan}
     }
 
@@ -209,7 +218,7 @@ public class RedisTest {
     @Test
     public void testHashExists(){
         String key = "user";
-        String hashKey = "name1";
+        String hashKey = "name";
         Boolean hExists = redisService.hExists(key, hashKey);
         if(hExists){
             log.info("存在hash类型键值{}-{}",key,hashKey);
@@ -227,7 +236,7 @@ public class RedisTest {
         map.put("asd", "dsa");
         map.put("qwe", "ewq");
         map.put("zxc", "cxz");
-        redisService.multiSet(map);
+        redisApiService.multiSet(map);
     }
 
     /**
@@ -238,7 +247,7 @@ public class RedisTest {
         Set<String> set = new HashSet<>();
         set.add("asd");
         set.add("zxc");
-        List<Object> list = redisService.multiGet(set);
+        List<Object> list = redisApiService.multiGet(set);
         log.info(list.toString());      // [dsa, cxz]
     }
 
@@ -251,7 +260,7 @@ public class RedisTest {
         Map<String,Object> maps = new HashMap<>();
         maps.put("age", 16);
         maps.put("sex", "男");
-        redisService.hMultiSet(key, maps);
+        redisApiService.hMultiSet(key, maps);
         log.info("批量更新对象{}中的属性值",key);
     }
 
@@ -264,7 +273,7 @@ public class RedisTest {
         String key = "user";
         hashKeys.add("age");
         hashKeys.add("sex");
-        List<Object> list = redisService.hMultiGet(key, hashKeys);
+        List<Object> list = redisApiService.hMultiGet(key, hashKeys);
         log.info(list.toString());           // [男, 16]
     }
 
@@ -275,7 +284,7 @@ public class RedisTest {
     public void testListPut(){
         String key = "list1";
         String value = "23";
-        Long num = redisService.lSet(key, value);
+        Long num = redisApiService.lSet(key, value);
     }
 
     /**
@@ -285,7 +294,7 @@ public class RedisTest {
     public void testListRemove(){
         String key = "list1";
         String value = "23";
-        Long num = redisService.lRemove(key, value);
+        Long num = redisApiService.lRemove(key, value);
         log.info("删除了{}个值",num.toString());
     }
 
@@ -299,8 +308,37 @@ public class RedisTest {
         values.add("15");
         values.add("25");
         String key = "list1";
-        Long num = redisService.lMultiSet(key, values);
+        Long num = redisApiService.lMultiSet(key, values);
         log.info("新增后，有{}个数据",num);
     }*/
+
+    /**
+     * 批量删除key
+     */
+    @Test
+    public void testBatchDelete(){
+        // [age, ab, aa]
+        Set<String> keys = new HashSet<>();
+        keys.add("abc");
+        keys.add("abd");
+        keys.add("ghfdj");
+        Long delNum = redisApiService.delete(keys);  // 未删除前 [asd, abe, abd, a, abc, age]
+        log.info("成功删除{}个key键",delNum);       // 成功删除2个key键
+        Set<String> set = redisApiService.fuzzy("a*");  // [asd, abe, a, age]
+        log.info(set.toString());    // [age]
+    }
+
+    /**
+     * 所有key的集合，String类型
+     */
+    @Test
+    public void testKeys(){
+        Set<String> keys = redisService.keys();
+        log.info("所有的key："+keys.toString());  // [b, asd, qwe, list1, a, myhashset02, zxc, mylist, age, cab, name, user]
+        Set<String> set = redisApiService.fuzzy("a*");
+        log.info(set.toString());   // [asd, abe, abd, a, abc, age]
+    }
+
+
 
 }
