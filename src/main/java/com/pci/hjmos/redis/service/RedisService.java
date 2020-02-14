@@ -2,6 +2,7 @@ package com.pci.hjmos.redis.service;
 
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.util.Collection;
 import java.util.List;
@@ -301,4 +302,20 @@ public interface RedisService {
      * 切换数据库
      */
     void selectDatabase(int indexDB);
+
+    /**
+     * 分布式锁获取 锁
+     * @param key 锁
+     * @param expire 时间  ;这里设置时间是为了防止死锁，超时自动解锁
+     * @return 是否获取到
+     */
+    boolean setLock(String key, long expire);
+
+    /**
+     * 释放分布式锁
+     * @param lockKey 锁
+     * @param requestId 请求标识
+     * @return 是否释放成功
+     */
+    boolean releaseDistributedLock(String lockKey, String requestId);
 }
