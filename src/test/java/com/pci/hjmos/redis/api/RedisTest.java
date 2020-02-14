@@ -331,13 +331,13 @@ public class RedisTest {
     /**
      * 所有key的集合，String类型
      */
-    @Test
+    /*@Test
     public void testKeys(){
         Set<String> keys = redisService.keys();
         log.info("所有的key："+keys.toString());  // [b, asd, qwe, list1, a, myhashset02, zxc, mylist, age, cab, name, user]
         Set<String> set = redisApiService.fuzzy("a*");
         log.info(set.toString());   // [asd, abe, abd, a, abc, age]
-    }
+    }*/
 
 
 
