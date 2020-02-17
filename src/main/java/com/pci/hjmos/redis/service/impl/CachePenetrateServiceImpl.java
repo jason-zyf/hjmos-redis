@@ -49,12 +49,12 @@ public class CachePenetrateServiceImpl implements CachePenetrateService {
         if(RedisConstant.bloomFilter.mightContain(key)){
             Object value = redisTemplate.opsForValue().get(key);
             if(value != null){
-                return value.toString();
+                return value.toString()+"-->缓存";
             }
             String dataBaseValue = "数据库中的值";
             System.out.println("布隆过滤器 -- 获取数据库中的值");
             redisTemplate.opsForValue().set(key, dataBaseValue,60,TimeUnit.MINUTES);
-            return dataBaseValue;
+            return dataBaseValue+"-->数据库";
         }else {
             System.out.println("该key不存在");
             return null;
