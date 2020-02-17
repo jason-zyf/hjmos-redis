@@ -1,5 +1,6 @@
 package com.pci.hjmos.redis.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.pci.hjmos.redis.service.CacheBreakdownService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
     public String cacheBreakdown_1(String key) throws InterruptedException {
         Object value = redisTemplate.opsForValue().get(key);
         if(value != null){
-            return value.toString();
+            return value.toString()+" --> 缓存,key:"+key+",线程："+Thread.currentThread().getName();
         }
         if(lock.tryLock()){
             String dataBaseValue;
@@ -40,9 +41,9 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
             }finally {
                 lock.unlock();
             }
-            return dataBaseValue+" --> ";
+            return dataBaseValue+" --> 数据库,key:"+key+",线程："+Thread.currentThread().getName();
         }
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(2);
         return cacheBreakdown_1(key);
     }
 
@@ -56,7 +57,7 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
         System.out.println("线程开始");
         Object value = redisTemplate.opsForValue().get(key);
         if (value!=null){
-            return value.toString();
+            return value.toString()+" --> 缓存,key:"+key+",线程："+Thread.currentThread().getName();
         }
         Boolean isSuccess=redisTemplate.opsForValue().setIfAbsent(localKey,"easy");
         System.out.println(Thread.currentThread().getName()+"isSuccess : "+isSuccess);
@@ -66,7 +67,7 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
             System.out.println("分布式锁 -- 获取数据库中的值");
             redisTemplate.opsForValue().set(key,dataBaseValue,60,TimeUnit.MINUTES);
             redisTemplate.delete(localKey);
-            return dataBaseValue;
+            return dataBaseValue+" --> 数据库,key:"+key+",线程："+Thread.currentThread().getName();
         }else{
             try {
                 System.out.println(Thread.currentThread().getName()+"\t开始等待");
@@ -87,13 +88,14 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
     public String cacheBreakdown_3(String key) {
         Object value = redisTemplate.opsForValue().get(key);
         if(value != null){
-            return value.toString();
+            return value.toString()+"-->缓存";
         }
         String dataBaseValue = "数据库中的值";
         Random random = new Random(100);
+        long expireTime = 60 + random.nextInt(6);
         System.out.println("随机过期时间 -- 获取数据库中的值");
-        redisTemplate.opsForValue().set(key,dataBaseValue,60+random.nextInt(6),TimeUnit.MINUTES);
-        return dataBaseValue;
+        redisTemplate.opsForValue().set(key,dataBaseValue,expireTime,TimeUnit.MINUTES);
+        return dataBaseValue+"-->数据库";
     }
 
     /**
@@ -102,12 +104,12 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
      * @return
      * @throws Exception
      */
-   /* @Override
+    @Override
     @HystrixCommand(fallbackMethod = "hystrixString")
     public String cacheBreakdown_4(String key) throws Exception {
         Object value = redisTemplate.opsForValue().get(key);
         if (value!=null){
-            return value.toString();
+            return value.toString() + "-->缓存";
         }
         String dataBaseValue="数据库中的值";
         System.out.println("hystrix -- 获取数据库中的值");
@@ -117,6 +119,6 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
 
     public String hystrixString(String key){
         return "服务器繁忙！";
-    }*/
+    }
 
 }
