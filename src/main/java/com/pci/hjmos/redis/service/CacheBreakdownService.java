@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public interface CacheBreakdownService {
 
     /**
-     * 缓存击穿,雪崩解决，使用线程锁，保证同一时刻只能有同一种key值能够进行 db数据的获取
+     * 缓存击穿,(雪崩解决)，使用线程锁，保证同一时刻只能有同一种key值能够进行 db数据的获取
      * @param key 缓存键
      * @return
      * @throws InterruptedException
@@ -34,6 +34,6 @@ public interface CacheBreakdownService {
      * @return
      * @throws Exception
      */
-//    String cacheBreakdown_4(String key) throws Exception;
+    String cacheBreakdown_4(String key) throws Exception;
 
 }
