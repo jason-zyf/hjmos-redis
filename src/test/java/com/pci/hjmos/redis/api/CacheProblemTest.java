@@ -1,8 +1,8 @@
 package com.pci.hjmos.redis.api;
 
-import com.pci.hjmos.redis.RedisApplication;
-import com.pci.hjmos.redis.service.CacheBreakdownService;
-import com.pci.hjmos.redis.service.CachePenetrateService;
+import com.pci.hjmos.cache.CacheApplication;
+import com.pci.hjmos.cache.service.CacheBreakdownService;
+import com.pci.hjmos.cache.service.CachePenetrateService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RedisApplication.class})
+@SpringBootTest(classes = {CacheApplication.class})
 @Slf4j
 public class CacheProblemTest {
 
