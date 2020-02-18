@@ -1,4 +1,4 @@
-package com.pci.hjmos.redis.api;
+package com.pci.hjmos.cache.api;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.*;
