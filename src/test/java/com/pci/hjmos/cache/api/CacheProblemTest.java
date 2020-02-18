@@ -1,4 +1,4 @@
-package com.pci.hjmos.redis.api;
+package com.pci.hjmos.cache.api;
 
 import com.pci.hjmos.cache.CacheApplication;
 import com.pci.hjmos.cache.service.CacheBreakdownService;
