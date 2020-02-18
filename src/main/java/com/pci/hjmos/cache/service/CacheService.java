@@ -1,4 +1,4 @@
-package com.pci.hjmos.redis.service;
+package com.pci.hjmos.cache.service;
 
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-public interface RedisService {
+public interface CacheService {
 
     /**
      * --------------------------------- String 操作---------------------------------
