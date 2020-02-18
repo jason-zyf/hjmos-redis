@@ -1,6 +1,6 @@
-package com.pci.hjmos.redis.service.impl;
+package com.pci.hjmos.cache.service.impl;
 
-import com.pci.hjmos.redis.service.RedisService;
+import com.pci.hjmos.cache.service.CacheService;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class RedisServiceImpl implements RedisService {
+public class CacheServiceImpl implements CacheService {
 
     @Resource
     RedisTemplate<String, Object> redisTemplate;
