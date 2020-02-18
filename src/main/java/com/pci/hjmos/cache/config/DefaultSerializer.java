@@ -1,6 +1,6 @@
-package com.pci.hjmos.redis.config;
+package com.pci.hjmos.cache.config;
 
-import com.pci.hjmos.redis.utils.JsonUtils;
+import com.pci.hjmos.cache.utils.JsonUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
