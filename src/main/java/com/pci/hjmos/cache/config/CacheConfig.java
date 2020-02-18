@@ -1,15 +1,13 @@
-package com.pci.hjmos.redis.config;
+package com.pci.hjmos.cache.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfig {
+public class CacheConfig {
 
     // 通过配置中心方式，先注释
     /*@Value("${spring.redis.host}")
