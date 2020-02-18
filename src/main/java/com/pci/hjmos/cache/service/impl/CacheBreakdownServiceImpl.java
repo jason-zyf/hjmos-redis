@@ -1,7 +1,7 @@
-package com.pci.hjmos.redis.service.impl;
+package com.pci.hjmos.cache.service.impl;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.pci.hjmos.redis.service.CacheBreakdownService;
+import com.pci.hjmos.cache.service.CacheBreakdownService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
