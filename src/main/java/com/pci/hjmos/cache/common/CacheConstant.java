@@ -1,10 +1,10 @@
-package com.pci.hjmos.redis.common;
+package com.pci.hjmos.cache.common;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
-public class RedisConstant {
+public class CacheConstant {
 
     public static BloomFilter<String> bloomFilter=
             BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8),100000,0.00001);
@@ -14,7 +14,7 @@ public class RedisConstant {
         bloomFilter.put("KEY2");
         bloomFilter.put("KEY3");
     }
-    private RedisConstant() throws Exception {
+    private CacheConstant() throws Exception {
         throw new Exception("failed");
     }
 
