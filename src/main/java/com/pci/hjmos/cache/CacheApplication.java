@@ -1,27 +1,22 @@
-package com.pci.hjmos.redis;
+package com.pci.hjmos.cache;
 
-import com.pci.hjmos.redis.api.RedisApiService;
-import com.pci.hjmos.redis.service.RedisService;
+import com.pci.hjmos.cache.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 @SpringBootApplication
 @RestController
 @EnableAsync
 @EnableHystrix
-public class RedisApplication {
+public class CacheApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RedisApplication.class,args);
+        SpringApplication.run(CacheApplication.class,args);
     }
 
     @GetMapping("/index")
@@ -50,12 +45,12 @@ public class RedisApplication {
     }*/
 
     @Autowired
-    private RedisService redisService;
+    private CacheService cacheService;
 
     @GetMapping("/hhadd")
     public String test(){
-        redisService.set("a", "测试一下框架搭建接口");
-        return redisService.get("a").toString();
+        cacheService.set("a", "测试一下框架搭建接口");
+        return cacheService.get("a").toString();
     }
 
 }
