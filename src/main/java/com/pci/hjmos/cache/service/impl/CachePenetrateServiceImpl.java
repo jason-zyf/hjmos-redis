@@ -1,7 +1,7 @@
-package com.pci.hjmos.redis.service.impl;
+package com.pci.hjmos.cache.service.impl;
 
-import com.pci.hjmos.redis.common.RedisConstant;
-import com.pci.hjmos.redis.service.CachePenetrateService;
+import com.pci.hjmos.cache.common.CacheConstant;
+import com.pci.hjmos.cache.service.CachePenetrateService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +46,7 @@ public class CachePenetrateServiceImpl implements CachePenetrateService {
     @Override
     public String cachePenetrate_2(String key) {
         // 先判断这个key值是否存在
-        if(RedisConstant.bloomFilter.mightContain(key)){
+        if(CacheConstant.bloomFilter.mightContain(key)){
             Object value = redisTemplate.opsForValue().get(key);
             if(value != null){
                 return value.toString()+"-->缓存";
