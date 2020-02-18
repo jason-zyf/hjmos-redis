@@ -1,4 +1,4 @@
-package com.pci.hjmos.redis.service;
+package com.pci.hjmos.cache.service;
 
 import org.springframework.stereotype.Component;
 
