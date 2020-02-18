@@ -1,7 +1,8 @@
 package com.pci.hjmos.redis.api;
 
-import com.pci.hjmos.redis.RedisApplication;
-import com.pci.hjmos.redis.service.RedisService;
+import com.pci.hjmos.cache.CacheApplication;
+import com.pci.hjmos.cache.api.RedisApiService;
+import com.pci.hjmos.cache.service.CacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,15 +15,15 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RedisApplication.class})
+@SpringBootTest(classes = {CacheApplication.class})
 @Slf4j
-public class RedisTest {
+public class CacheTest {
 
     @Resource
     private RedisApiService redisApiService;
 
     @Autowired
-    private RedisService redisService;
+    private CacheService redisService;
 
     /******************   String 类型   ******************/
     /**
