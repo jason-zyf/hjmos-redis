@@ -2,6 +2,7 @@ package com.pci.hjmos.cache.service.impl;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.pci.hjmos.cache.service.CacheBreakdownService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +86,7 @@ public class CacheBreakdownServiceImpl implements CacheBreakdownService {
      * @return
      */
     @Override
+    @CacheEvict
     public String cacheBreakdown_3(String key) {
         Object value = redisTemplate.opsForValue().get(key);
         if(value != null){

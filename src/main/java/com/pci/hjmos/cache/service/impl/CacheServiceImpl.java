@@ -242,6 +242,7 @@ public class CacheServiceImpl implements CacheService {
         RedisCallback<String> callback = (connection) -> {
             JedisCommands commands = (JedisCommands) connection.getNativeConnection();
             String uuid = UUID.randomUUID().toString();
+            // EX = seconds; PX = milliseconds 单位不同
             return commands.set(key, uuid, "NX", "PX", expire);
         };
         String result = redisTemplate.execute(callback);
@@ -250,14 +251,13 @@ public class CacheServiceImpl implements CacheService {
 
     private static final String UNLOCK_LUA;
     static {
-        StringBuilder sb = new StringBuilder();
-        sb.append("if redis.call(\"get\",KEYS[1]) == ARGV[1] ");
-        sb.append("then ");
-        sb.append("    return redis.call(\"del\",KEYS[1]) ");
-        sb.append("else ");
-        sb.append("    return 0 ");
-        sb.append("end ");
-        UNLOCK_LUA = sb.toString();
+        String sb = "if redis.call(\"get\",KEYS[1]) == ARGV[1] " +
+                "then " +
+                "    return redis.call(\"del\",KEYS[1]) " +
+                "else " +
+                "    return 0 " +
+                "end ";
+        UNLOCK_LUA = sb;
     }
     @Override
     public boolean releaseDistributedLock(String key, String requestId) {
