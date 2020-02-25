@@ -1,7 +1,6 @@
 package com.pci.hjmos.cache.api;
 
 import com.pci.hjmos.cache.CacheApplication;
-import com.pci.hjmos.cache.api.RedisApiService;
 import com.pci.hjmos.cache.service.CacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -19,8 +18,8 @@ import java.util.*;
 @Slf4j
 public class CacheTest {
 
-    @Resource
-    private RedisApiService redisApiService;
+//    @Resource
+//    private RedisApiService redisApiService;
 
     @Autowired
     private CacheService redisService;
@@ -300,19 +299,6 @@ public class CacheTest {
         log.info("成功设置过期时间");
     }
     /**
-     * 设置key的过期时间
-     */
-    @Test
-    public void testExpire(){
-        String key = "a";
-        boolean expire = redisApiService.expire(key, 10);
-        if(expire){
-            log.info("测试设置过期时间接口，设置过期时间成功");
-        }else {
-            log.info("测试设置过期时间接口，设置过期时间失败");
-        }
-    }
-    /**
      * 判断键值key是否存在
      */
     @Test
@@ -339,64 +325,6 @@ public class CacheTest {
     }
     /**************    测试了以上内容
 
-
-    /**
-     * 获取key集合中的value值
-     */
-    @Test
-    public void testGetCollection(){
-
-        Set<String> set = new HashSet<>();
-        redisApiService.set("a", "aa");
-        redisApiService.set("b", "bb");
-
-        set.add("a");
-        set.add("b");
-        Collection<Object> objects = redisApiService.get(set);
-        log.info(objects.toString());          // [aa, bb]
-    }
-
-    /**
-     * 自增a的值，如果这是a的值为非数据类型，会报错
-     */
-    @Test
-    public void testIncr(){
-        redisApiService.set("a", 1);
-        redisApiService.incr("a");
-        log.info(redisApiService.get("a").toString());    // 2
-    }
-
-    /**
-     * 模糊查询key的值
-     */
-    @Test
-    public void testFuzzy(){
-        redisApiService.set("aa", 1);
-        redisApiService.set("ab", 1);
-        redisApiService.set("cab", 1);
-
-        Set<String> set = redisApiService.fuzzy("a*");
-        Set<String> set2 = redisApiService.fuzzy("a.");
-
-        log.info(set.toString());       // [ab, age, asd, a, aa]
-        log.info(set2.toString());      // []
-    }
-
-    /**
-     * 批量删除key键集合
-     */
-    @Test
-    public void testDelateKeys(){
-        // [age, ab, aa]
-        Set<String> keys = new HashSet<>();
-        keys.add("aa");
-        keys.add("ab");
-        Long delNum = redisApiService.delete(keys);
-        log.info("成功删除{}个key键",delNum);
-        Set<String> set = redisApiService.fuzzy("a*");
-        log.info(set.toString());    // [age]
-    }
-
     /**
      * 根据key和hashkey获取hash类型的值
      */
@@ -411,18 +339,7 @@ public class CacheTest {
         log.info("获取hash类型"+key+"的"+hashKey+"属性值，{}",obj.toString());
     }
 
-    /**
-     * 查询hash中多个属性的值
-     */
-    @Test
-    public void testHashMultiGet(){
-        Set<Object> hashKeys = new HashSet<>();
-        String key = "user";
-        hashKeys.add("age");
-        hashKeys.add("sex");
-        List<Object> list = redisApiService.hMultiGet(key, hashKeys);
-        log.info(list.toString());           // [男, 16]
-    }
+
 
     /**
      * 所有key的集合，String类型
