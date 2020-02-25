@@ -31,9 +31,13 @@ public class CacheTest {
      */
     @Test
     public void testSetValue(){
-        redisService.set("config", "测试一下配置中心");
+        Map<String,Object> map = new HashMap<>();
+        map.put("name", "lisi");
+        map.put("age", 13);
+
+        redisService.set("config", map);
 //        redisService.set("b", "测试一下");
-        log.info("设置a的值，{}",redisService.get("a").toString());
+        log.info("设置config的值，{}",redisService.get("config"));
 
         /**
          * 设置key-value且设置key的过期时间
