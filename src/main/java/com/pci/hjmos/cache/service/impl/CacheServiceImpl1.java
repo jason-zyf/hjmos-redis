@@ -1,6 +1,6 @@
 package com.pci.hjmos.cache.service.impl;
 
-import com.pci.hjmos.cache.service.CacheService1;
+import com.pci.hjmos.cache.api.CacheService1;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
